@@ -67,7 +67,9 @@ TnPLocation = ""
 hostName = os.environ['HOSTNAME']
 
 #TnPLocation = "/tmp/hbrun/TnPTree_Express_Run2017A_296172_to_296174_KPLee.root";
-TnPLocation = "/tmp/hbrun/TnPtree_Express296173-296174.root";
+#"/eos/cms/store/group/phys_muon/hbrun/dataCommissioning/checkFirstData/TnPtree_Express296173-296174.root"
+#/eos/cms/store/group/phys_muon/TagAndProbe/Run2017/data/RunA/TnPTree_SingleMuon_Run2017Av2_296172_to_296174_DCSOnly.root
+TnPLocation = "/tmp/quwang/TnPTree_SingleMuon_Run2017Av2_296172_to_296174_DCSOnly.root";
 
 BaseLocation = TnPLocation + "/" + version;
 
@@ -115,7 +117,12 @@ Template = cms.EDAnalyzer("TagProbeFitTreeAnalyzer",
     Categories = cms.PSet(
         tag_IsoMu24 = cms.vstring("tag_IsoMu24", "dummy[pass=1,fail=0]"),
         Tight2012 = cms.vstring("Tight2012", "dummy[pass=1,fail=0]"),
-        IsoMu24 = cms.vstring("tag_IsoMu24", "dummy[pass=1,fail=0]"),
+        IsoMu24 = cms.vstring("IsoMu24", "dummy[pass=1,fail=0]"),
+        DoubleIsoMu17Mu8_IsoMu17leg   = cms.vstring("DoubleIsoMu17Mu8_IsoMu17leg", "dummy[pass=1,fail=0]"),
+        DoubleIsoMu17Mu8_IsoMu8leg    = cms.vstring("DoubleIsoMu17Mu8_IsoMu8leg", "dummy[pass=1,fail=0]"),
+        DoubleIsoMu17TkMu8_IsoMu17leg = cms.vstring("DoubleIsoMu17TkMu8_IsoMu17leg", "dummy[pass=1,fail=0]"),
+        DoubleIsoMu17TkMu8_IsoMu8leg  = cms.vstring("DoubleIsoMu17TkMu8_IsoMu8leg", "dummy[pass=1,fail=0]"),
+        
     ),
 
     Expressions = cms.PSet(
@@ -217,6 +224,8 @@ Template = cms.EDAnalyzer("TagProbeFitTreeAnalyzer",
 # print Template.Categories
 
 PtMin = 9999
+List_Pt10 = ["DoubleIsoMu17Mu8_IsoMu8leg", "DoubleIsoMu17TkMu8_IsoMu8leg"]
+List_Pt20 = ["DoubleIsoMu17Mu8_IsoMu17leg", "DoubleIsoMu17TkMu8_IsoMu17leg"]
 List_Pt22 = ["IsoMu20_OR_IsoTkMu20", "IsoMu20", "IsoTkMu20", "L1_IsoMu20", "L2_IsoMu20", "L3_IsoMu20", "IsoF_IsoMu20", "TkMuF_IsoTkMu20", "IsoF_IsoTkMu20", "Tight2012", "RelTrkIso_010", "L3_IsoMu20_OR_TkMuF_IsoTkMu20"]
 List_Pt24 = ["IsoMu22_OR_IsoTkMu22"]
 List_Pt26 = ["IsoMu24_OR_IsoTkMu24", "IsoMu24", "IsoTkMu24", "L2_IsoMu24", "L3_IsoMu24", "IsoF_IsoMu24", "TkMuF_IsoTkMu24", "IsoF_IsoTkMu24", "L3_IsoMu24_OR_TkMuF_IsoTkMu24", "IsoF_IsoMu24_OR_IsoF_IsoTkMu24"]
@@ -229,6 +238,8 @@ elif PassingProbe in List_Pt26: PtMin = 26
 elif PassingProbe in List_Pt29: PtMin = 29
 elif PassingProbe in List_Pt47: PtMin = 47
 elif PassingProbe in List_Pt52: PtMin = 52
+elif PassingProbe in List_Pt10: PtMin = 10
+elif PassingProbe in List_Pt20: PtMin = 20
 
 EtaMax = 2.4
 List_eta2p1 = ["Mu45_eta2p1", "L1_Mu45_eta2p1", "L2_Mu45_eta2p1"]
@@ -252,6 +263,8 @@ elif PassingProbe in List_Pt26: PT_ETA_BINS.pt = cms.vdouble( 26, 30, 40, 50, 60
 elif PassingProbe in List_Pt29: PT_ETA_BINS.pt = cms.vdouble( 29, 40, 50, 60, 120, 200, 500 )
 elif PassingProbe in List_Pt47: PT_ETA_BINS.pt = cms.vdouble( 47, 50, 60, 120, 200, 500 )
 elif PassingProbe in List_Pt52: PT_ETA_BINS.pt = cms.vdouble( 52, 55, 60, 80, 120, 200, 300, 400, 800 )
+elif PassingProbe in List_Pt10: PT_ETA_BINS.pt = cms.vdouble( 10, 15, 20, 25, 30, 40, 50, 60, 120, 200, 500 )
+elif PassingProbe in List_Pt20: PT_ETA_BINS.pt = cms.vdouble( 20, 25, 30, 40, 50, 60, 120, 200, 500 )
 # elif PassingProbe in List_Pt52: PT_ETA_BINS.pt = cms.vdouble( 53, 100, 200, 700 )
 
 if EtaMax == 2.1: PT_ETA_BINS.abseta = cms.vdouble(0.0, 0.9, 1.2, 2.1)
@@ -269,7 +282,7 @@ PT_BINS = cms.PSet(
 )
 List_Binning_TurnOn_16 = ["L1SingleMu16"]
 List_Binning_TurnOn_18 = ["L1_IsoMu20"]
-List_Binning_TurnOn_20 = ["IsoMu20_OR_IsoTkMu20", "IsoMu20", "IsoTkMu20", "L2_IsoMu20", "L3_IsoMu20", "IsoF_IsoMu20", "TkMuF_IsoTkMu20", "IsoF_IsoTkMu20", "L2_Mu45_eta2p1", "L2_Mu50", "L3_IsoMu20_OR_TkMuF_IsoTkMu20"]
+List_Binning_TurnOn_20 = ["IsoMu20_OR_IsoTkMu20", "IsoMu20", "IsoTkMu20", "L2_IsoMu20", "L3_IsoMu20", "IsoF_IsoMu20", "TkMuF_IsoTkMu20", "IsoF_IsoTkMu20", "L2_Mu45_eta2p1", "L2_Mu50", "L3_IsoMu20_OR_TkMuF_IsoTkMu20", "DoubleIsoMu17Mu8_IsoMu17leg", "DoubleIsoMu17TkMu8_IsoMu17leg"]
 List_Binning_TurnOn_22 = ["IsoMu22_OR_IsoTkMu22", "L1_Mu45_eta2p1", "L1_Mu50", "L1_IsoMu24"]
 List_Binning_TurnOn_24 = ["IsoMu24_OR_IsoTkMu24", "IsoMu24", "IsoTkMu24", "L2_IsoMu24", "L3_IsoMu24", "IsoF_IsoMu24", "TkMuF_IsoTkMu24", "IsoF_IsoTkMu24", "L3_IsoMu24_OR_TkMuF_IsoTkMu24", "IsoF_IsoMu24_OR_IsoF_IsoTkMu24"]
 List_Binning_TurnOn_26 = []
@@ -277,6 +290,7 @@ List_Binning_TurnOn_27 = ["IsoMu27_OR_IsoTkMu27", "IsoMu27", "IsoTkMu27"]
 List_Binning_TurnOn_45 = ["Mu45_eta2p1"]
 List_Binning_TurnOn_50 = ["Mu50", "HLT_TkMu50", "Mu50_OR_TkMu50"]
 List_Binning_NoTurnOn = ["Tight2012", "RelTrkIso_010"]
+List_Binning_TurnOn_10 = ["DoubleIsoMu17Mu8_IsoMu8leg", "DoubleIsoMu17TkMu8_IsoMu8leg"]
 
 
 if PassingProbe in List_Binning_TurnOn_16:
@@ -300,6 +314,8 @@ elif PassingProbe in List_Binning_TurnOn_50:
     # PT_BINS.pt = cms.vdouble( 0, 10, 15, 20, 25, 30, 40, 45, 48, 50, 53, 100, 200, 700 )
 elif PassingProbe in List_Binning_NoTurnOn:
     PT_BINS.pt = cms.vdouble( 22, 25, 30, 40, 50, 60, 80, 120, 200, 500 )
+elif PassingProbe in List_Binning_TurnOn_10:
+    PT_BINS.pt = cms.vdouble( 0, 10, 14, 16, 18, 20, 25, 30, 40, 50, 60, 80, 120, 200, 500 )
 
 
 ETA_BINS = cms.PSet(
@@ -373,7 +389,7 @@ IDS = [args[1]] #here the id is taken from the arguments provided to cmsRun
 # ALLBINS = [ ("vtx",VTX_BINS) ]
 # ALLBINS = [ ("eta",ETA_BINS), ("vtx",VTX_BINS), ("phi",PHI_BINS) ]
 # ALLBINS = [ ("pt",PT_BINS), ("eta",ETA_BINS), ("phi",PHI_BINS), ("vtx",VTX_BINS), ("pteta",PT_ETA_BINS) ]
-ALLBINS = [ ("pteta",PT_ETA_BINS) ]
+ALLBINS = [ ("pteta",PT_ETA_BINS), ("pt",PT_BINS)]
 
 # ALLBINS = [("pteta",PT_ETA_BINS)]
 # ALLBINS = [("run", RUN_BINS)]

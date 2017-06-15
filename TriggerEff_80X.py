@@ -69,7 +69,7 @@ hostName = os.environ['HOSTNAME']
 #TnPLocation = "/tmp/hbrun/TnPTree_Express_Run2017A_296172_to_296174_KPLee.root";
 #"/eos/cms/store/group/phys_muon/hbrun/dataCommissioning/checkFirstData/TnPtree_Express296173-296174.root"
 #/eos/cms/store/group/phys_muon/TagAndProbe/Run2017/data/RunA/TnPTree_SingleMuon_Run2017Av2_296172_to_296174_DCSOnly.root
-TnPLocation = "/tmp/quwang/TnPTree_SingleMuon_Run2017Av2_296172_to_296174_DCSOnly.root";
+TnPLocation = "/tmp/hbrun/tnpZ_fordZcheck.root";
 
 BaseLocation = TnPLocation + "/" + version;
 
@@ -109,7 +109,6 @@ Template = cms.EDAnalyzer("TagProbeFitTreeAnalyzer",
         abseta = cms.vstring("muon |#eta|", "0", "2.5", ""),
         tag_abseta = cms.vstring("tag muon |#eta|", "0", "2.5", ""),
         tag_nVertices = cms.vstring("Number of vertices", "0", "999", ""),
-
         pair_deltaR = cms.vstring("pair_deltaR", "0", "999", ""),
 
     ),
@@ -117,12 +116,16 @@ Template = cms.EDAnalyzer("TagProbeFitTreeAnalyzer",
     Categories = cms.PSet(
         tag_IsoMu24 = cms.vstring("tag_IsoMu24", "dummy[pass=1,fail=0]"),
         Tight2012 = cms.vstring("Tight2012", "dummy[pass=1,fail=0]"),
+        tag_Tight2012 = cms.vstring("tag_Tight2012", "dummy[pass=1,fail=0]"),
         IsoMu24 = cms.vstring("IsoMu24", "dummy[pass=1,fail=0]"),
         DoubleIsoMu17Mu8_IsoMu17leg   = cms.vstring("DoubleIsoMu17Mu8_IsoMu17leg", "dummy[pass=1,fail=0]"),
         DoubleIsoMu17Mu8_IsoMu8leg    = cms.vstring("DoubleIsoMu17Mu8_IsoMu8leg", "dummy[pass=1,fail=0]"),
         DoubleIsoMu17TkMu8_IsoMu17leg = cms.vstring("DoubleIsoMu17TkMu8_IsoMu17leg", "dummy[pass=1,fail=0]"),
         DoubleIsoMu17TkMu8_IsoMu8leg  = cms.vstring("DoubleIsoMu17TkMu8_IsoMu8leg", "dummy[pass=1,fail=0]"),
-        
+        passMu17Mu8NoDz  = cms.vstring("passMu17Mu8NoDz", "dummy[pass=1,fail=0]"),
+        passMu17Mu8Dz  = cms.vstring("passMu17Mu8Dz", "dummy[pass=1,fail=0]"),
+
+
     ),
 
     Expressions = cms.PSet(
@@ -359,6 +362,16 @@ VTX_BINS  = cms.PSet(
 )
 
 
+ETA_BINS_FORDZ = cms.PSet(
+					abseta = cms.vdouble(0,0.9,1.2,2.1,2.4),
+					tag_abseta = cms.vdouble(0,0.9,1.2,2.1,2.4),
+                    pt     = cms.vdouble( 20, 9999 ),
+                    tag_pt =  cms.vdouble(20, 9999),
+                    Tight2012 = cms.vstring("pass"),
+                    tag_Tight2012 = cms.vstring("pass"),
+                    passMu17Mu8NoDz = cms.vstring("pass")
+                      )
+
 process.TnP_MuonID = Template.clone(
     InputFileNames = cms.vstring(),
     InputTreeName = cms.string("fitter_tree"),
@@ -389,12 +402,13 @@ IDS = [args[1]] #here the id is taken from the arguments provided to cmsRun
 # ALLBINS = [ ("vtx",VTX_BINS) ]
 # ALLBINS = [ ("eta",ETA_BINS), ("vtx",VTX_BINS), ("phi",PHI_BINS) ]
 # ALLBINS = [ ("pt",PT_BINS), ("eta",ETA_BINS), ("phi",PHI_BINS), ("vtx",VTX_BINS), ("pteta",PT_ETA_BINS) ]
-ALLBINS = [ ("pteta",PT_ETA_BINS), ("pt",PT_BINS)]
+#ALLBINS = [ ("pteta",PT_ETA_BINS), ("pt",PT_BINS)]
 
 # ALLBINS = [("pteta",PT_ETA_BINS)]
 # ALLBINS = [("run", RUN_BINS)]
 # ALLBINS = [("pt",PT_BINS), ("eta",ETA_BINS), ("phi",PHI_BINS), ("InstLumi",InstLumi_BINS), ("bx",BX_BINS) ]
 # ALLBINS = [("InstLumi",InstLumi_BINS)]
+ALLBINS = [("dZ_eta",ETA_BINS_FORDZ)]
 
 if len(args) > 1 and args[1] not in IDS: IDS += [ args[1] ]
 for ID in IDS:
